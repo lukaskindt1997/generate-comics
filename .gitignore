@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Generated artwork and run outputs (large; reproducible from sidecars)
+outputs/
+
+# Copyrighted source material: book photos, OCR text, excerpts.
+# Keep these local only, never push them.
+source/
