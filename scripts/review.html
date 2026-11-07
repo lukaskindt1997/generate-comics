@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Text review</title>
+<style>
+  :root { --bg:#f6f4ef; --card:#fff; --ink:#222; --muted:#777; --line:#ddd8cc;
+          --flag:#fff3d6; --flagb:#e7c66b; --ok:#e3f1e3; --okb:#86b886; --accent:#5a4632; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.45 -apple-system, system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+  header { position:sticky; top:0; z-index:5; background:var(--accent); color:#fff; padding:10px 18px;
+           display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0 12px 0 0; font-weight:600; }
+  .tabs button { background:transparent; color:#fff; border:1px solid #fff6; border-radius:4px;
+                 padding:4px 10px; margin-right:4px; cursor:pointer; font:inherit; }
+  .tabs button.active { background:#fff; color:var(--accent); }
+  .tabs button .n { font-size:11px; opacity:.8; margin-left:4px; }
+  #status { margin-left:auto; font-size:13px; opacity:.9; }
+  main { max-width:1500px; margin:0 auto; padding:18px; }
+  .pagebar { display:flex; gap:18px; align-items:center; margin-bottom:14px; color:var(--muted); }
+  .pagebar a { color:var(--accent); }
+  .para { display:grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap:16px;
+          background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px; }
+  .para.done { border-color:var(--okb); background:#fbfffb; }
+  .para img { width:100%; border-radius:4px; display:block; background:#eee; min-height:40px; }
+  textarea { width:100%; min-height:110px; font:16px/1.5 Georgia, serif; padding:8px; border:1px solid var(--line);
+             border-radius:4px; resize:vertical; }
+  .tools { display:flex; gap:6px; flex-wrap:wrap; margin:6px 0; align-items:center; }
+  .tools button, .flag button { font:inherit; font-size:13px; padding:3px 8px; border:1px solid #bbb;
+             border-radius:4px; background:#fafafa; cursor:pointer; }
+  .tools label { margin-left:auto; font-size:14px; cursor:pointer; }
+  .flag { background:var(--flag); border:1px solid var(--flagb); border-radius:4px; padding:6px 8px;
+          margin-top:6px; font-size:14px; }
+  .flag.closed { background:#f1f1f1; border-color:#ddd; color:var(--muted); }
+  .flag .t { font-size:12px; color:#3d7a3d; font-weight:600; }
+  .flag .ctx { font-family:Georgia, serif; color:#555; display:block; margin-top:2px; }
+  .flag .ctx b { background:#ffe08a; }
+  .flag .act { float:right; display:flex; gap:4px; }
+  .hint { color:var(--muted); font-size:13px; }
+  .modes button { font:inherit; font-size:13px; padding:3px 10px; border:1px solid #bbb; background:#fafafa;
+                  cursor:pointer; margin-right:-1px; }
+  .modes button:first-child { border-radius:4px 0 0 4px; } .modes button:last-child { border-radius:0 4px 4px 0; }
+  .modes button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .question { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:10px; }
+  .question .q { font-weight:600; margin-bottom:4px; }
+  .question .hint { margin-bottom:6px; }
+  .planwrap { display:grid; grid-template-columns: 340px minmax(0,1fr); gap:18px; align-items:start; }
+  .sketch { position:sticky; top:64px; width:340px; aspect-ratio: 1 / 1.35; background:#fff; border:1px solid #999;
+            padding:6px; display:flex; flex-direction:column; gap:6px; }
+  .tier { display:flex; gap:6px; }
+  .pbox { border:2px solid #333; background:#faf8f3; padding:4px 6px; overflow:hidden; color:inherit;
+          text-decoration:none; display:flex; flex-direction:column; font-size:11px; line-height:1.25; }
+  .pbox:hover { background:#fff3d6; }
+  .pbox .pn { font-size:18px; font-weight:700; } .pbox .ps { font-weight:600; color:var(--accent); }
+  .pbox .pp { color:#555; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:10px; }
+  .panel h3 { margin:0 0 4px; font-size:16px; } .panel p { margin:8px 0; }
+  .panel > div { margin-top:4px; } .sub { margin-left:12px; } .cap { font-family:Georgia, serif; }
+  .safety { background:#fdecea; border:1px solid #e6a7a0; border-radius:4px; padding:4px 8px; font-size:13px; margin-top:6px; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:10px; }
+  .badge.rec { background:#e3eefa; color:#2b5b8a; } .badge.user { background:#e3f1e3; color:#2f6b2f; }
+  .badge.none { background:#eee; color:#777; }
+  textarea.answer { min-height:60px; font:15px/1.4 -apple-system, system-ui, sans-serif; }
+  .captions { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px;
+              margin-top:14px; font-family:Georgia, serif; }
+  .captions b { font-family:-apple-system, system-ui, sans-serif; display:block; margin-bottom:4px; }
+  .finish { display:flex; gap:16px; align-items:center; justify-content:flex-end; padding:16px 4px 40px; font-size:15px; }
+  .finish button { font:inherit; padding:8px 16px; border-radius:6px; border:1px solid #bbb; background:#fafafa; cursor:pointer; }
+  .finish button.primary { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600; }
+  .help { background:#fff; border:1px solid var(--line); border-radius:6px; padding:8px 12px;
+          margin-bottom:14px; font-size:14px; color:#444; }
+  .flag button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .flag .act { margin-left:8px; }
+  .num { color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Text review</h1>
+  <div class="tabs" id="tabs"></div>
+  <div id="status">loading…</div>
+</header>
+<main id="main"></main>
+
+<script>
+let state = null, current = 0, saveTimer = null, mode = "text";
+const $ = (tag, attrs = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) if (kid != null) el.append(kid.nodeType ? kid : document.createTextNode(kid));
+  return el;
+};
+
+async function load() {
+  state = await (await fetch("/api/state")).json();
+  // Start at the page in the URL (#p4), else at the first unfinished page.
+  const fromHash = state.pages.findIndex(pg => "#p" + pg.page === location.hash);
+  const firstOpen = state.pages.findIndex(pg => !pg.finished);
+  current = fromHash >= 0 ? fromHash : (firstOpen >= 0 ? firstOpen : 0);
+  render();
+  setStatus("loaded");
+}
+
+function setStatus(s) { document.getElementById("status").textContent = s + " · " + progress(); }
+
+function openFlags(pg) {
+  return pg.paragraphs.reduce((n, p) => n + p.flags.filter(f => f.status === "open").length, 0);
+}
+
+function progress() {
+  const finished = state.pages.filter(pg => pg.finished).length;
+  return `${finished}/${state.pages.length} pages finished`;
+}
+
+function scheduleSave() {
+  setStatus("unsaved…");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 700);
+}
+
+async function save() {
+  const r = await fetch("/api/state", { method: "POST", headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(state) });
+  setStatus(r.ok ? "saved " + new Date().toLocaleTimeString() : "SAVE FAILED: " + await r.text());
+  renderTabs();
+}
+
+function cropUrl(stem, b) {
+  return b ? `/crop?stem=${stem}&x=${b.x.toFixed(4)}&y=${b.y.toFixed(4)}&w=${b.w.toFixed(4)}&h=${b.h.toFixed(4)}` : "";
+}
+
+function union(a, b) {
+  if (!a) return b; if (!b) return a;
+  const x0 = Math.min(a.x, b.x), y0 = Math.min(a.y, b.y);
+  const x1 = Math.max(a.x + a.w, b.x + b.w), y1 = Math.max(a.y + a.h, b.y + b.h);
+  return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+}
+
+function renderTabs() {
+  const tabs = document.getElementById("tabs");
+  tabs.replaceChildren(...state.pages.map((pg, i) => {
+    return $("button", { class: i === current ? "active" : "", onclick: () => goTo(i) },
+             `p${pg.page}`, $("span", { class: "n" }, pg.finished ? "✓" : `${openFlags(pg)}⚑`));
+  }));
+}
+
+const EXPLAIN = {
+  name: "This looks like a misread name.",
+  suspect: "A real word, but one that OCR often gets wrong.",
+  unknown: "Not a known word, so probably misread.",
+  quotes: "The quote marks don't add up here, so one may be missing.",
+  first_letter: "The large first letter of the chapter was probably lost.",
+  disagree: "The two OCR readings disagree here.",
+};
+const CLOSED = {
+  applied: "✓ suggestion used", fixed: "✓ fixed by hand", correct: "✓ text was correct",
+  resolved: "✓ closed",
+};
+
+function highlight(ctx, word) {
+  const span = $("span", { class: "ctx" });
+  if (!ctx) return span;
+  const i = word ? ctx.indexOf(word) : -1;
+  if (i < 0) { span.append("…" + ctx + "…"); return span; }
+  span.append("…" + ctx.slice(0, i), $("b", {}, word), ctx.slice(i + word.length) + "…");
+  return span;
+}
+
+function goTo(i) {
+  current = i;
+  history.replaceState(null, "", "#p" + state.pages[i].page);
+  render();
+  window.scrollTo(0, 0);
+}
+
+async function finishPage() {
+  const pg = state.pages[current];
+  const open = openFlags(pg);
+  if (open && !confirm(`${open} yellow box(es) on this page are still unanswered. Finish anyway?`)) return;
+  pg.finished = true;
+  clearTimeout(saveTimer);
+  await save();
+  const next = state.pages.findIndex((p, i) => i > current && !p.finished);
+  if (next >= 0) goTo(next); else render();
+}
+
+function modeSwitch() {
+  return $("span", { class: "modes" },
+    $("button", { class: mode === "text" ? "on" : "", onclick: () => { mode = "text"; render(); } }, "1 · Text"),
+    $("button", { class: mode === "questions" ? "on" : "", onclick: () => { mode = "questions"; render(); } }, "2 · Questions"),
+    $("button", { class: mode === "plan" ? "on" : "", onclick: () => { mode = "plan"; render(); } }, "3 · Plan"));
+}
+
+function render() {
+  renderTabs();
+  const pg = state.pages[current];
+  const main = document.getElementById("main");
+  if (mode === "questions") return renderQuestions(pg, main);
+  if (mode === "plan") return renderPlan(pg, main);
+  const bar = $("div", { class: "pagebar" },
+    $("strong", {}, `Page ${pg.page} — ${pg.photo}`), modeSwitch(),
+    $("a", { href: `/page?stem=${pg.stem}`, target: "_blank" }, "open full photo"),
+    $("label", {}, $("input", { type: "checkbox", checked: pg.continues_previous,
+        onchange: e => { pg.continues_previous = e.target.checked; scheduleSave(); } }),
+      " first paragraph continues the previous page"),
+  );
+  const help = $("div", { class: "help" },
+    "Compare each text with the photo next to it and fix it directly in the text box. ",
+    "Yellow boxes are possible errors. For each one, pick ",
+    $("b", {}, "Use suggestion"), ", ", $("b", {}, "Fixed it myself"), " or ",
+    $("b", {}, "Text is correct"), " (false alarm). A blank line inside a text box splits a paragraph; ",
+    $("b", {}, "insert [[?]]"), " marks text you can't read. When the page matches the photo, click ",
+    $("b", {}, "Finish page"), " at the bottom.");
+  const open = openFlags(pg);
+  const finish = $("div", { class: "finish" },
+    pg.finished
+      ? [$("span", {}, `✓ Page ${pg.page} is finished. Edits are still saved.`),
+         $("button", { onclick: () => { pg.finished = false; scheduleSave(); render(); } }, "Reopen page")]
+      : [$("span", {}, open ? `${open} yellow box(es) still unanswered on this page.` : "All yellow boxes answered."),
+         $("button", { class: "primary", onclick: finishPage }, `Finish page ${pg.page} →`)],
+    pg.finished ? $("button", { class: "primary", onclick: () => { mode = "questions"; render(); window.scrollTo(0, 0); } },
+                    "Go to questions →") : null);
+  main.replaceChildren(bar, help, ...pg.paragraphs.map((p, i) => renderPara(pg, p, i)), finish);
+  setStatus("page " + pg.page);
+}
+
+function renderPara(pg, p, i) {
+  const ta = $("textarea", { oninput: e => { p.text = e.target.value; scheduleSave(); } });
+  ta.value = p.text;
+  const flags = p.flags.map(f => {
+    const closed = f.status !== "open";
+    const canApply = f.word && f.suggestion && ["name", "suspect", "unknown"].includes(f.type);
+    const close = status => () => { f.status = status; scheduleSave(); render(); };
+    const act = $("span", { class: "act" },
+      closed ? $("button", { onclick: close("open") }, "undo") : [
+        canApply ? $("button", { class: "primary", onclick: () => {
+          const idx = p.text.indexOf(f.word);
+          if (idx < 0) { alert(`"${f.word}" is no longer in the text. If you already fixed it, choose "Fixed it myself".`); return; }
+          p.text = p.text.slice(0, idx) + f.suggestion + p.text.slice(idx + f.word.length);
+          f.status = "applied"; scheduleSave(); render();
+        } }, "Use suggestion") : null,
+        $("button", { onclick: close("fixed"), title: "It was an error and you corrected the text yourself" }, "Fixed it myself"),
+        $("button", { onclick: close("correct"), title: "False alarm: the text matches the photo" }, "Text is correct"),
+      ]);
+    return $("div", { class: "flag" + (closed ? " closed" : "") }, act,
+      closed ? $("span", { class: "t" }, CLOSED[f.status] || "✓ closed") : null,
+      $("div", {}, EXPLAIN[f.type] || f.type),
+      f.word ? $("strong", {}, f.word) : null,
+      f.suggestion ? (canApply ? ` → ${f.suggestion}` : $("span", { class: "hint" }, ` (${f.suggestion})`)) : "",
+      f.other_reading ? $("span", { class: "hint" }, `  · other reading: ${f.other_reading}`) : null,
+      highlight(f.context, f.word));
+  });
+  const tools = $("div", { class: "tools" },
+    $("span", { class: "num" }, `¶${i + 1}`),
+    i > 0 ? $("button", { title: "Join this paragraph to the one above", onclick: () => {
+      const prev = pg.paragraphs[i - 1];
+      prev.text = prev.text.trimEnd() + " " + p.text.trimStart();
+      prev.box = union(prev.box, p.box);
+      prev.flags = prev.flags.concat(p.flags);
+      prev.done = false;
+      pg.paragraphs.splice(i, 1);
+      scheduleSave(); render();
+    } }, "↑ merge with previous") : null,
+    $("button", { title: "Insert [[?]] at the cursor for text you cannot read", onclick: () => {
+      const pos = ta.selectionStart ?? p.text.length;
+      p.text = p.text.slice(0, pos) + "[[?]]" + p.text.slice(pos);
+      scheduleSave(); render();
+    } }, "insert [[?]]"));
+  return $("div", { class: "para" },
+    $("div", {}, p.box ? $("img", { src: cropUrl(pg.stem, p.box), loading: "lazy" })
+                       : $("div", { class: "hint" }, "(no photo region)")),
+    $("div", {}, ta, tools, flags));
+}
+
+async function renderQuestions(pg, main) {
+  const bar = $("div", { class: "pagebar" }, $("strong", {}, `Page ${pg.page}`), modeSwitch());
+  main.replaceChildren(bar, $("p", { class: "hint" }, "loading…"));
+  const info = await (await fetch(`/api/scene?page=${pg.page}`)).json();
+  const analyse = $("button", { class: "primary", onclick: async () => {
+    analyse.disabled = true; analyse.textContent = "Analysing… (about a minute)";
+    const r = await (await fetch("/api/analyse", { method: "POST", body: JSON.stringify({ page: pg.page }) })).json();
+    if (!r.ok) alert("Analysis failed:\n" + r.log);
+    render();
+  } }, info.exists ? "Re-run analysis" : "Analyse this page");
+  if (!pg.finished) {
+    main.replaceChildren(bar, $("div", { class: "help" },
+      "Finish the text review of this page first (tab 1 · Text); the analysis uses the reviewed text."));
+    return;
+  }
+  if (!info.exists) {
+    main.replaceChildren(bar, $("div", { class: "help" },
+      "Claude reads this page (with the chapter brief) and lists characters, story beats, captions ",
+      "and the questions the book leaves open."), $("div", { class: "finish" }, analyse));
+    return;
+  }
+  let timer = null;
+  const saveAnswers = () => {
+    clearTimeout(timer);
+    setStatus("unsaved…");
+    timer = setTimeout(async () => {
+      const r = await fetch("/api/answers", { method: "POST",
+        body: JSON.stringify({ page: pg.page, answers: info.questions }) });
+      setStatus(r.ok ? "answers saved " + new Date().toLocaleTimeString() : "SAVE FAILED");
+    }, 600);
+  };
+  const qs = info.questions.map((q, i) => {
+    const badge = $("span", { class: "badge" });
+    const updateBadge = () => {
+      const rec = q.recommendation && q.answer.trim() === q.recommendation.trim();
+      badge.textContent = !q.answer.trim() ? "empty: planner decides" : rec ? "recommendation (accepted)" : "your answer";
+      badge.className = "badge " + (!q.answer.trim() ? "none" : rec ? "rec" : "user");
+    };
+    const ta = $("textarea", { class: "answer", placeholder: "Empty = let the planner decide.",
+                               oninput: e => { q.answer = e.target.value; updateBadge(); saveAnswers(); } });
+    ta.value = q.answer;
+    updateBadge();
+    const scope = $("select", { onchange: e => { q.scope = e.target.value; saveAnswers(); } },
+      $("option", { value: "story", selected: q.scope === "story" }, "applies to the whole story"),
+      $("option", { value: "page", selected: q.scope === "page" }, "this page only"));
+    const reset = q.recommendation ? $("button", { onclick: () => {
+      q.answer = q.recommendation; q.scope = q.default_scope; ta.value = q.answer;
+      scope.value = q.scope; updateBadge(); saveAnswers();
+    } }, "back to recommendation") : null;
+    return $("div", { class: "question" }, $("div", { class: "q" }, `${i + 1}. ${q.question}`),
+             q.reason ? $("div", { class: "hint" }, "Why I recommend this: " + q.reason) : null,
+             ta, $("div", { class: "tools" }, badge, scope, reset));
+  });
+  main.replaceChildren(bar,
+    $("div", { class: "help" },
+      $("b", {}, "What happens on this page: "), info.summary,
+      $("div", { class: "hint", style: "margin-top:6px" },
+        "These are questions the book leaves open. Each one is pre-filled with my recommendation: leave it ",
+        "to accept, or change it. Answers marked “whole story” (e.g. what a character looks like) also apply ",
+        "to later pages. Saved automatically.")),
+    ...qs,
+    $("div", { class: "captions" }, $("b", {}, "Proposed captions"),
+      ...info.captions.map(c => $("div", {}, "• " + c.text))),
+    $("div", { class: "finish" }, analyse, acceptBtn(pg)));
+}
+
+function acceptBtn(pg) {
+  const btn = $("button", { class: "primary", onclick: async () => {
+    const plan = await (await fetch(`/api/plan?page=${pg.page}`)).json();
+    if (plan.exists && !confirm("A page plan already exists. Make a new one with the current answers?\n(Cancel = just show the existing plan.)")) {
+      mode = "plan"; render(); return;
+    }
+    pg.questions_accepted = true; clearTimeout(saveTimer); await save();
+    btn.disabled = true; btn.textContent = "Creating page plan… (about a minute)";
+    const r = await (await fetch("/api/plan", { method: "POST", body: JSON.stringify({ page: pg.page }) })).json();
+    if (!r.ok) { alert("Planning failed:\n" + r.log); render(); return; }
+    mode = "plan"; render(); window.scrollTo(0, 0);
+  } }, "Accept answers & create page plan →");
+  return btn;
+}
+
+const SHOT = { extreme_wide: "extreme wide", wide: "wide", medium_wide: "medium wide", medium: "medium",
+               medium_close: "medium close", close_up: "close-up", extreme_close_up: "extreme close-up" };
+const ANGLE = { eye_level: "eye level", low: "low angle", high: "high angle", birds_eye: "bird's-eye",
+                worms_eye: "worm's-eye", over_the_shoulder: "over the shoulder", dutch: "tilted" };
+
+async function renderPlan(pg, main) {
+  const bar = $("div", { class: "pagebar" }, $("strong", {}, `Page ${pg.page}`), modeSwitch());
+  main.replaceChildren(bar, $("p", { class: "hint" }, "loading…"));
+  const info = await (await fetch(`/api/plan?page=${pg.page}`)).json();
+  if (!info.exists) {
+    main.replaceChildren(bar, $("div", { class: "help" },
+      "No page plan yet. Go to ", $("b", {}, "2 · Questions"), " and click ", $("b", {}, "Accept answers & create page plan"), "."));
+    return;
+  }
+  const plan = info.plan;
+  const byNum = Object.fromEntries(plan.panels.map(p => [p.panel, p]));
+  const sketch = $("div", { class: "sketch" }, ...plan.tiers.map(t =>
+    $("div", { class: "tier", style: `height:${(t.height * 100).toFixed(1)}%` }, ...t.panels.map(tp => {
+      const p = byNum[tp.panel] || {};
+      return $("a", { class: "pbox", href: `#panel-${tp.panel}`, style: `width:${(tp.width * 100).toFixed(1)}%`,
+                      onclick: e => { e.preventDefault(); document.getElementById(`panel-${tp.panel}`).scrollIntoView({ behavior: "smooth" }); } },
+        $("span", { class: "pn" }, tp.panel), $("span", { class: "ps" }, `${SHOT[p.shot] || ""}`),
+        $("span", { class: "pp" }, p.purpose || ""));
+    }))));
+  const details = plan.panels.map(p => $("div", { class: "panel", id: `panel-${p.panel}` },
+    $("h3", {}, `Panel ${p.panel} · ${SHOT[p.shot]} · ${ANGLE[p.angle]}`),
+    $("div", { class: "hint" }, p.purpose),
+    $("p", {}, p.description),
+    p.characters.length ? $("div", {}, $("b", {}, "Characters: "),
+      ...p.characters.map(c => $("div", { class: "sub" }, `${c.id}: ${c.position}; ${c.pose}; ${c.expression}; facing ${c.facing}`))) : null,
+    $("div", {}, $("b", {}, "Light: "), p.lighting),
+    p.captions.length ? $("div", {}, $("b", {}, "Captions: "),
+      ...p.captions.map(c => $("div", { class: "sub cap" }, `[${c.placement.replace("_", " ")}] ${c.text}`))) : null,
+    p.dialogue.length ? $("div", {}, $("b", {}, "Dialogue: "),
+      ...p.dialogue.map(d => $("div", { class: "sub cap" }, `${d.speaker} [${d.placement.replace("_", " ")}]: ${d.text}`))) : null,
+    $("div", {}, $("b", {}, "Keep free for text: "), p.text_space),
+    p.safety_notes ? $("div", { class: "safety" }, "Content note: " + p.safety_notes) : null));
+  const note = $("textarea", { class: "answer", placeholder: "Want changes? Describe them, e.g. “make panel 2 bigger” or “show the Vane from behind in panel 3”." });
+  const replan = $("button", { onclick: async () => {
+    if (!note.value.trim()) { alert("Describe what should change first."); return; }
+    replan.disabled = true; replan.textContent = "Re-planning… (about a minute)";
+    const r = await (await fetch("/api/plan", { method: "POST", body: JSON.stringify({ page: pg.page, note: note.value }) })).json();
+    if (!r.ok) alert("Planning failed:\n" + r.log);
+    pg.plan_accepted = false; scheduleSave(); render(); window.scrollTo(0, 0);
+  } }, "Re-plan with this feedback");
+  const accept = pg.plan_accepted
+    ? $("span", {}, "✓ Plan accepted. Next: panel generation (Milestone D, not built yet). ",
+        $("button", { onclick: () => { pg.plan_accepted = false; scheduleSave(); render(); } }, "undo"))
+    : $("button", { class: "primary", onclick: () => { pg.plan_accepted = true; scheduleSave(); render(); } }, "Accept plan →");
+  main.replaceChildren(bar,
+    $("div", { class: "help" }, $("b", {}, "Idea: "), plan.page_concept),
+    info.problems.length ? $("div", { class: "safety" }, "Layout warnings: " + info.problems.join("; ")) : null,
+    $("div", { class: "planwrap" }, sketch, $("div", { class: "details" }, ...details)),
+    $("div", { class: "panel" }, $("b", {}, "Choices the planner made"),
+      ...plan.design_choices.map(c => $("div", { class: "sub" }, "• " + c))),
+    $("div", { class: "panel" }, $("b", {}, "Change the plan"), note, $("div", { class: "tools" }, replan)),
+    $("div", { class: "finish" }, accept));
+}
+
+load().catch(e => { document.getElementById("status").textContent = "error: " + e; });
+</script>
+</body>
+</html>

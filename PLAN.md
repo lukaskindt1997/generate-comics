@@ -191,6 +191,38 @@ Turn each panel into a generation request, **in code**, not by hand.
 - Not yet tested: choosing the model per request, img2img / reference images (needed for Milestone D).
 - System Python is 3.9.6 (old; we may want a newer Python)
 
+## Milestone B findings (in progress)
+
+- B1 ✅ `source/manifest.yaml`: Gardens of the Moon, Prologue, pages 3–8 (English paperback), photos `1-3.jpg` … `1-8.jpg`.
+- B2 ✅ `scripts/ocr_vision.swift`: Apple Vision OCR, no installs. Picks the rotation where lines come out horizontal (correct for all 6 photos). Raw output in `outputs/ocr/<photo>.vision.json`.
+- Clean flat pages read almost perfectly. Errors are mostly single letters (`Bum's`→Burn's, `holred`→bolted, `chem`→them).
+- **Vision's confidence scores are not useful**: wrong words usually still get 1.0. Error detection must come from elsewhere (dictionary + names list, human review).
+- Facing-page text gets picked up; it differs clearly in position and angle, so it can be filtered.
+- Curved pages lose the ends of lines near the spine (`1-6.jpg`). This can't be recovered from the photo.
+- Language correction on is slightly better than off.
+- B3 ✅ `scripts/clean_ocr.py`: deterministic cleanup → `outputs/text/<photo>.clean.txt`, `<photo>.flags.json`, `prologue.clean.txt` (with `⟨pN⟩` page markers). Keeps the main text column (using start position, angle and centre of lines), orders lines by their left edge, detects paragraphs from indent + short previous line, joins hyphenation only if the joined word is in the dictionary, normalises quotes, flags unknown words (macOS dictionary + `source/names.txt`).
+- Remaining issues are left for the correction pass (B3b): misread words, cut-off line ends, dropped opening quotes, the large first letter, a few wrong paragraph breaks.
+- ❌ Full-page transcription with Claude (via `claude -p`; script since deleted) is **blocked by the API's content filter** ("Output blocked by content filtering policy"): Claude won't output long verbatim passages of a published novel. This is a policy limit, not a bug, and we don't work around it. Consequence: **verbatim text stays a local job** (Vision OCR + rules + human/local-model correction). Claude can still work *from* the text (analysis, panel planning) as long as its output isn't a reproduction of it. Watch for this in later steps that quote dialogue.
+- B3c ✅ `scripts/check_text.py`: local error checks → `outputs/text/<photo>.checks.json`. Each flag has a type, the word, a suggestion, context and the photo line box (for review crops). Checks: unknown word, one-letter-confusion from a known name (`Canoes`→Ganoes, `Bum's`→Burn's), known OCR-misread real words (`dean`→clean, `it you`→if you), quote balance, missing drop cap, possible cut-off line (weak), and disagreement with a second Vision reading (language correction off, `<photo>.vision-raw.json`). ~66 flags over 6 pages, mostly real errors.
+- B4 ✅ `scripts/review_server.py` + `scripts/review.html`: local review UI (stdlib only, `127.0.0.1:8765`). Works page by page: one card per paragraph (photo crop, editable text, flags answered with *Use suggestion* / *Fixed it myself* / *Text is correct*), *Finish page →* moves to the next page. Autosaves to `outputs/text/review.json` (+ `.bak`), exports `outputs/text/prologue.reviewed.md` and per page `outputs/text/reviewed/p<N>.md` + `status.json` (which pages are finished). Later steps can start as soon as one page is finished. `--reset` starts over from OCR output.
+- Known misses: real-word errors outside the lists (`him land`, `You new`), so human review of the full text is still needed once.
+- Decision (superseded for transcription, see above): Claude may be used for correction (user on personal tokens). Optional later: Claude returns only a *list* of suspected errors (not the text). Each correction is labelled *read* (visible in photo) or *inferred* (guessed from context); the user reviews only *inferred* ones.
+
+## Milestone C decisions & findings (in progress)
+
+- **1 book page = 1 comic page.** If a page's last paragraph continues on the next book page, it's left out and carried over (`outputs/comic/carryover/to_p<N+1>.md`), then joined with its ending on the next page. A short page (e.g. chapter end) becomes a closing splash page.
+- **Text on the page:** dialogue word for word; narration condensed and only where the image can't show it.
+- **Claude (`claude -p`) does analysis and planning.** Its output is analysis/plan, not the book text.
+- `source/story_facts.md`: facts the analysis may use beyond the current page (e.g. Ganoes is 12). No spoilers.
+- C0 ✅ `scripts/prepare_page.py <N>` → `outputs/comic/page-<NNN>/input.json` (paragraph ids P1…, carry-over handling).
+- C1 ✅ `scripts/analyze_scene.py <N>` → `scene.json` (characters, locations, objects, atmosphere, beats, captions, dialogue, open questions, all with paragraph evidence) + `scene.meta.json`. Never overwrites: older versions are renamed. Page 3: ~28 s.
+
+- C1b ✅ `scripts/analyze_chapter.py` → `outputs/comic/chapter-<section>/brief.json`: Claude reads the **whole chapter first** (reviewed text where finished, otherwise cleaned OCR). Characters/locations/objects with facts + page revealed, timeline, plot **reveals** with "don't hint before page N", OCR doubts. Prologue: ~57 s. Page analysis uses all descriptive facts, but only reveals up to the current page.
+- C1c ✅ **Questions step** in the review UI (tab *2 · Questions* per page): run the analysis, answer the open questions (scope: whole story / this page). Each question comes **pre-filled with Claude's recommendation + reason**; untouched = recommendation accepted. Stored in `source/decisions.json` (`source`: recommended / user); used by the analysis and later the planner. Empty answer = planner decides.
+- C2 ✅ `scripts/plan_page.py <N> [--note "..."]` → `page_plan.json`: tiers (rows) with panel widths/heights, per panel beats, shot, angle, characters (position/pose/expression/facing), lighting, visual description, captions/dialogue with placement, space to keep free for text, safety notes; plus `design_choices` where answers left options open. Deterministic layout validation (sums, numbering). Never overwrites. Page 3: 5 panels / 3 tiers, ~50 s.
+- UI: *2 · Questions* has **Accept answers & create page plan →**; *3 · Plan* shows a layout sketch + panel details, **Re-plan with feedback**, **Accept plan →**.
+- Workflow per page: **Text review → Analysis → Questions → Page plan → (Milestone D) panel generation**.
+
 ## Still needed
 
 - A sample photo of the book page to start with
