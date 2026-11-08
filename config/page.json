@@ -1,0 +1,30 @@
+{
+  "comment": "European album page at 300 dpi (about 21 x 28.4 cm). Pixels.",
+  "width": 2480,
+  "height": 3350,
+  "margin": 118,
+  "gutter": 36,
+  "generation": {
+    "target_pixels": 900000,
+    "multiple": 64,
+    "min_side": 512,
+    "max_side": 1600
+  },
+  "reference_rules": {
+    "object_refs_only_for_shots": [
+      "medium_wide",
+      "medium",
+      "medium_close",
+      "close_up",
+      "extreme_close_up"
+    ]
+  },
+  "lettering": {
+    "comment": "Real size on the page (pixels at 300 dpi). ~8 pt lettering.",
+    "font_px": 34,
+    "line_height": 1.25,
+    "padding_px": 14,
+    "max_width_px": 640,
+    "margin_px": 24
+  }
+}

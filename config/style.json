@@ -1,0 +1,42 @@
+{
+  "name": "European dark fantasy, v3",
+  "prompt_block": "Realistic European dark fantasy graphic novel illustration in the Franco-Belgian album tradition: detailed expressive ink linework, painterly textures, muted atmospheric colour palette, believable medieval clothing and equipment, serious natural expressions, realistic proportions.",
+  "always": "The image is pure illustration from edge to edge: only the scene itself, with clean empty areas where needed.",
+  "base_view": {
+    "character": {
+      "width": 832,
+      "height": 1216,
+      "layout": "Character reference: a single full-body view of one person standing upright and facing the viewer, arms relaxed at the sides, the whole figure from head to boots in frame, centred on a plain light grey studio background. Even, neutral studio lighting, calm neutral expression."
+    },
+    "object": {
+      "width": 1024,
+      "height": 1024,
+      "layout": "Object reference: a single view of the complete object from a three-quarter front angle, fully in frame, centred on a plain light grey studio background. Even, neutral studio lighting."
+    },
+    "location": {
+      "width": 1344,
+      "height": 768,
+      "layout": "Location reference: a wide establishing view in clear daylight with readable architecture."
+    }
+  },
+  "views": {
+    "character": [
+      {
+        "name": "three-quarter",
+        "prompt": "The same person as in the reference image, now turned three-quarters to the left, full body from head to boots, standing upright on the same plain light grey background. Keep the face, hair, body, clothing, colours and art style exactly the same."
+      },
+      {
+        "name": "portrait",
+        "prompt": "A head-and-shoulders portrait of the same person as in the reference image, facing the viewer, on the same plain light grey background. Keep the face, hair, collar, clothing, colours and art style exactly the same."
+      }
+    ],
+    "object": [
+      {
+        "name": "side",
+        "prompt": "The same object as in the reference image, now seen exactly from the side, complete and fully in frame, on the same plain light grey background. Keep its shape, material, colours, details and art style exactly the same."
+      }
+    ],
+    "location": []
+  },
+  "auto_fix_rounds": 1
+}

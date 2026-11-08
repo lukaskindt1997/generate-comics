@@ -57,6 +57,81 @@
   .panel h3 { margin:0 0 4px; font-size:16px; } .panel p { margin:8px 0; }
   .panel > div { margin-top:4px; } .sub { margin-left:12px; } .cap { font-family:Georgia, serif; }
   .safety { background:#fdecea; border:1px solid #e6a7a0; border-radius:4px; padding:4px 8px; font-size:13px; margin-top:6px; }
+  .cands { display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap:12px; margin-top:10px; }
+  .cand { border:2px solid var(--line); border-radius:6px; padding:6px; background:#fafafa; }
+  .cand.approved { border-color:var(--okb); background:#f3fbf3; }
+  .cand img, .approvedbox img { width:100%; display:block; border-radius:4px; }
+  .approvedbox { max-width:820px; margin:8px 0; }
+  .review { font-size:13px; margin-top:6px; line-height:1.35; }
+  .review .dev { color:#9a3412; } .review .dev.book { color:#b91c1c; font-weight:600; } .review .dev.free { color:#8a6d1c; } .review .story { color:#6b4f12; }
+  .review .pro { color:#2f6b2f; } .review .con { color:#8a2b2b; }
+  .badge.warn { background:#fdecea; color:#9a3412; }
+  .cand.best { box-shadow: 0 0 0 3px #e7c66b; }
+  .verdict { background:#fffbea; border:1px solid var(--flagb); border-radius:6px; padding:8px 10px; margin:10px 0; font-size:14px; }
+  .verdict .issues, .verdict .suggest { margin-top:8px; }
+  .verdict .habit { background:#eef4fb; border:1px solid #b9cfe6; border-radius:6px; padding:6px 8px; }
+  .verdict .habit .sub { margin:6px 0 0 0; }
+  .verdict .habit .quote { margin:2px 0 2px 0; font-style:italic; }
+  .reflayout { display:grid; grid-template-columns: 230px minmax(0,1fr); gap:18px; align-items:start; }
+  .sidebar { position:sticky; top:64px; background:var(--card); border:1px solid var(--line); border-radius:8px;
+             padding:10px; max-height:calc(100vh - 84px); overflow:auto; }
+  .sidebar input { width:100%; font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:4px; margin-bottom:8px; }
+  .stitle { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:8px 0 4px; }
+  .sitem { display:block; padding:4px 6px; border-radius:4px; color:inherit; text-decoration:none; font-size:14px; }
+  .sitem:hover { background:#f3efe6; } .sitem.on { background:var(--accent); color:#fff; }
+  .sicon { display:inline-block; width:20px; }
+  .legend { margin-top:12px; font-size:11px; }
+  #jobs { position:fixed; right:16px; bottom:16px; z-index:20; width:290px; background:#fff; border:1px solid var(--accent);
+          border-radius:8px; box-shadow:0 4px 18px #0002; padding:8px 10px; font-size:13px; }
+  #jobs .jtitle { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:4px; }
+  #jobs .jitem { display:block; color:inherit; text-decoration:none; padding:5px 6px; border-radius:4px; }
+  #jobs .jitem:hover { background:#f3efe6; } #jobs .jitem.now { background:#fff3d6; }
+  #jobs .jwhat { color:#555; }
+  #jobs .jbar { height:5px; background:#eee; border-radius:3px; margin-top:4px; overflow:hidden; }
+  #jobs .jbar div { height:100%; background:var(--accent); }
+  .preview .pbox { background-size:cover; background-position:center; color:#fff; text-shadow:0 0 3px #000; }
+  .preview .pbox.chosen { border-color:var(--okb); }
+  .textwrap { position:relative; container-type:inline-size; } .textwrap img { display:block; }
+  .preview .pbox { container-type:inline-size; }
+  .textbox { position:absolute; background:rgba(255,253,240,.9); border-style:solid; border-color:#222;
+             font-family:Georgia, serif; color:#111; pointer-events:none; text-shadow:none; overflow-wrap:break-word; }
+  .textbox.speech { border-radius:1.2em; }
+  .bookwrap { position:relative; background:#3a3530; padding:16px 72px; border-radius:8px; }
+  .bookwrap:fullscreen { padding:24px 72px; border-radius:0; background:#1e1b18; overflow-y:auto; }
+  .bookpage { position:relative; aspect-ratio: 2480 / 3350; background:#fff; box-shadow:0 4px 24px #0006; margin:0 auto; }
+  .bookpage.fit-width { width:100%; }
+  .bookpage.fit-height { height:calc(100vh - 190px); }
+  .bookwrap:fullscreen .bookpage.fit-height { height:calc(100vh - 48px); }
+  .bookpanel { position:absolute; background-size:cover; background-position:center; border:2px solid #000;
+               container-type:inline-size; overflow:hidden; }
+  .bookpanel.empty { background:#e0e0e0; display:flex; align-items:center; justify-content:center; }
+  .emptylabel { color:#777; font-size:13px; }
+  .pstatus { position:absolute; right:4px; bottom:4px; font-size:11px; padding:1px 6px; border-radius:8px;
+             background:#fff; color:#333; }
+  .pstatus.chosen { background:#e3f1e3; } .pstatus.not-generated { background:#fdecea; }
+  .booknav { position:fixed; top:50%; transform:translateY(-50%); font-size:42px; line-height:1; width:52px; height:84px;
+             border:none; border-radius:6px; background:#0006; color:#fff; cursor:pointer; z-index:30; }
+  .booknav:hover { background:#000a; }
+  .booknav:disabled { opacity:.15; cursor:default; } .booknav.prev { left:10px; } .booknav.next { right:10px; }
+  .bookno { position:fixed; bottom:12px; left:50%; transform:translateX(-50%); color:#fff; font-size:13px;
+            background:#0008; padding:3px 12px; border-radius:10px; z-index:30; }
+  .btnlink { font:inherit; font-size:13px; padding:4px 10px; border:1px solid var(--accent); border-radius:4px;
+             color:var(--accent); text-decoration:none; background:#fff; }
+  pre.prompt { white-space:pre-wrap; font-size:12px; background:#f6f4ef; padding:8px; border-radius:4px; }
+  .openpoints { background:#f6f4ef; border-radius:6px; padding:6px 10px; margin:6px 0; font-size:14px; }
+  .openpoints summary { cursor:pointer; }
+  .blocked { background:#fdecea; border:2px solid #d9534f; border-radius:6px; padding:8px 10px; margin:8px 0; font-size:14px; }
+  .blocked a { font-weight:600; }
+  .refshow { display:flex; gap:0; margin-bottom:8px; }
+  .refshow button { flex:1; font:inherit; font-size:12px; padding:3px 4px; border:1px solid #bbb; background:#fafafa;
+                    cursor:pointer; margin-right:-1px; }
+  .refshow button:first-child { border-radius:4px 0 0 4px; } .refshow button:last-child { border-radius:0 4px 4px 0; }
+  .refshow button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .rchips .rchip { display:inline-block; margin:2px 8px 2px 0; }
+  .newref { margin-bottom:8px; } .newref summary { cursor:pointer; font-weight:600; font-size:14px; }
+  .newref select, .newref input { width:100%; margin:4px 0; font:inherit; }
+  .sitem.sugg { color:#555; } .sitem.sugg.planned { color:var(--ink); font-weight:600; }
+  button.mini { font-size:11px; padding:0 6px; float:right; }
   .badge { font-size:12px; padding:2px 8px; border-radius:10px; }
   .badge.rec { background:#e3eefa; color:#2b5b8a; } .badge.user { background:#e3f1e3; color:#2f6b2f; }
   .badge.none { background:#eee; color:#777; }
@@ -78,9 +153,11 @@
 <header>
   <h1>Text review</h1>
   <div class="tabs" id="tabs"></div>
+  <div class="tabs"><button id="refsBtn" onclick="mode='refs'; refsSig=''; render(); window.scrollTo(0,0)">References</button><button id="bookBtn" onclick="mode='book'; render(); window.scrollTo(0,0)">Pages</button></div>
   <div id="status">loading…</div>
 </header>
 <main id="main"></main>
+<aside id="jobs" hidden></aside>
 
 <script>
 let state = null, current = 0, saveTimer = null, mode = "text";
@@ -141,9 +218,11 @@ function union(a, b) {
 }
 
 function renderTabs() {
+  document.getElementById("refsBtn").className = mode === "refs" ? "active" : "";
+  document.getElementById("bookBtn").className = mode === "book" ? "active" : "";
   const tabs = document.getElementById("tabs");
   tabs.replaceChildren(...state.pages.map((pg, i) => {
-    return $("button", { class: i === current ? "active" : "", onclick: () => goTo(i) },
+    return $("button", { class: i === current && mode !== "refs" && mode !== "book" ? "active" : "", onclick: () => goTo(i) },
              `p${pg.page}`, $("span", { class: "n" }, pg.finished ? "✓" : `${openFlags(pg)}⚑`));
   }));
 }
@@ -172,6 +251,7 @@ function highlight(ctx, word) {
 
 function goTo(i) {
   current = i;
+  if (mode === "refs" || mode === "book") mode = "text";
   history.replaceState(null, "", "#p" + state.pages[i].page);
   render();
   window.scrollTo(0, 0);
@@ -192,15 +272,19 @@ function modeSwitch() {
   return $("span", { class: "modes" },
     $("button", { class: mode === "text" ? "on" : "", onclick: () => { mode = "text"; render(); } }, "1 · Text"),
     $("button", { class: mode === "questions" ? "on" : "", onclick: () => { mode = "questions"; render(); } }, "2 · Questions"),
-    $("button", { class: mode === "plan" ? "on" : "", onclick: () => { mode = "plan"; render(); } }, "3 · Plan"));
+    $("button", { class: mode === "plan" ? "on" : "", onclick: () => { mode = "plan"; render(); } }, "3 · Plan"),
+    $("button", { class: mode === "panels" ? "on" : "", onclick: () => { mode = "panels"; panelsSig = ""; render(); } }, "4 · Panels"));
 }
 
 function render() {
   renderTabs();
   const pg = state.pages[current];
   const main = document.getElementById("main");
+  if (mode === "refs") return renderRefs(main);
+  if (mode === "book") return renderBook(main);
   if (mode === "questions") return renderQuestions(pg, main);
   if (mode === "plan") return renderPlan(pg, main);
+  if (mode === "panels") return renderPanels(pg, main);
   const bar = $("div", { class: "pagebar" },
     $("strong", {}, `Page ${pg.page} — ${pg.photo}`), modeSwitch(),
     $("a", { href: `/page?stem=${pg.stem}`, target: "_blank" }, "open full photo"),
@@ -393,7 +477,10 @@ async function renderPlan(pg, main) {
     p.dialogue.length ? $("div", {}, $("b", {}, "Dialogue: "),
       ...p.dialogue.map(d => $("div", { class: "sub cap" }, `${d.speaker} [${d.placement.replace("_", " ")}]: ${d.text}`))) : null,
     $("div", {}, $("b", {}, "Keep free for text: "), p.text_space),
-    p.safety_notes ? $("div", { class: "safety" }, "Content note: " + p.safety_notes) : null));
+    // New plans: show a note only for flagged panels. Older plans (no flags field): show as before.
+    (p.content_flags ? p.content_flags.length : p.safety_notes)
+      ? $("div", { class: "safety" }, (p.content_flags && p.content_flags.length ? `Content: ${p.content_flags.join(", ")}. ` : ""),
+          p.safety_notes || "") : null));
   const note = $("textarea", { class: "answer", placeholder: "Want changes? Describe them, e.g. “make panel 2 bigger” or “show the Vane from behind in panel 3”." });
   const replan = $("button", { onclick: async () => {
     if (!note.value.trim()) { alert("Describe what should change first."); return; }
@@ -403,9 +490,9 @@ async function renderPlan(pg, main) {
     pg.plan_accepted = false; scheduleSave(); render(); window.scrollTo(0, 0);
   } }, "Re-plan with this feedback");
   const accept = pg.plan_accepted
-    ? $("span", {}, "✓ Plan accepted. Next: panel generation (Milestone D, not built yet). ",
+    ? $("span", {}, "✓ Plan accepted. ", $("button", { class: "primary", onclick: () => { mode = "panels"; panelsSig = ""; render(); window.scrollTo(0, 0); } }, "Go to panels →"), " ",
         $("button", { onclick: () => { pg.plan_accepted = false; scheduleSave(); render(); } }, "undo"))
-    : $("button", { class: "primary", onclick: () => { pg.plan_accepted = true; scheduleSave(); render(); } }, "Accept plan →");
+    : $("button", { class: "primary", onclick: () => { pg.plan_accepted = true; scheduleSave(); mode = "panels"; panelsSig = ""; render(); window.scrollTo(0, 0); } }, "Accept plan & go to panels →");
   main.replaceChildren(bar,
     $("div", { class: "help" }, $("b", {}, "Idea: "), plan.page_concept),
     info.problems.length ? $("div", { class: "safety" }, "Layout warnings: " + info.problems.join("; ")) : null,
@@ -415,6 +502,572 @@ async function renderPlan(pg, main) {
     $("div", { class: "panel" }, $("b", {}, "Change the plan"), note, $("div", { class: "tools" }, replan)),
     $("div", { class: "finish" }, accept));
 }
+
+let refsPoll = null, refsSig = "", refFilter = "", refShow = localStorage.getItem("refShow") || "all";
+let refSel = (location.hash.match(/^#ref=(.+)$/) || [])[1] || null;
+if (refSel) { refSel = decodeURIComponent(refSel); mode = "refs"; }
+
+const KIND_TITLES = { characters: "Characters", objects: "Objects", locations: "Locations" };
+
+function refState(r) {
+  if (r.running) return { icon: "⏳", title: "working" };
+  if (r.queued.length) return { icon: "🕒", title: `queued (position ${r.queued[0].position})` };
+  if (r.ref.kind === "location") return { icon: "📝", title: "location: description only (used as text in panel prompts)" };
+  const waiting = (r.components || []).filter(c => !c.approved);
+  if (waiting.length) return { icon: "⛔", title: "waiting for: " + waiting.map(c => c.name).join(", ") };
+  if (!r.candidates.length) return { icon: "○", title: "no images yet: generate candidates" };
+  if (!r.ref.approved) return { icon: "⚠", title: "no approved reference" };
+  const a = r.assessment;
+  if (a && a.best && !a.best.endsWith(r.ref.approved.from_candidate)) return { icon: "★", title: "assessment prefers another candidate" };
+  return { icon: "✓", title: "approved" };
+}
+
+function refSidebar(refs, main) {
+  const search = $("input", { type: "search", placeholder: "Search…", value: refFilter, oninput: e => {
+    refFilter = e.target.value; refsSig = ""; renderRefs(main);
+  } });
+  const needsApproval = r => r.ref.kind !== "location" && !r.ref.approved;
+  const counts = { all: refs.length, todo: refs.filter(needsApproval).length,
+                   done: refs.filter(r => !needsApproval(r)).length };
+  const showBtn = (key, label) => $("button", { class: refShow === key ? "on" : "",
+    onclick: () => { refShow = key; localStorage.setItem("refShow", key); refsSig = ""; renderRefs(main); } },
+    `${label} (${counts[key]})`);
+  const show = $("div", { class: "refshow" }, showBtn("all", "All"), showBtn("todo", "Not approved"), showBtn("done", "Approved"));
+  const groups = {};
+  for (const r of refs) {
+    if (refShow === "todo" && !needsApproval(r)) continue;
+    if (refShow === "done" && needsApproval(r)) continue;
+    if (refFilter && !r.ref.name.toLowerCase().includes(refFilter.toLowerCase())) continue;
+    (groups[r.path.split("/")[0]] ||= []).push(r);
+  }
+  const sections = Object.keys(KIND_TITLES).filter(k => groups[k]).map(k =>
+    $("div", { class: "sgroup" }, $("div", { class: "stitle" }, `${KIND_TITLES[k]} (${groups[k].length})`),
+      ...groups[k].sort((a, b) => a.ref.name.localeCompare(b.ref.name)).map(r => {
+        const st = refState(r);
+        return $("a", { class: "sitem" + (r.path === refSel ? " on" : ""), href: `#ref=${encodeURIComponent(r.path)}`, title: st.title,
+                        onclick: e => { e.preventDefault(); refSel = r.path; history.replaceState(null, "", `#ref=${encodeURIComponent(r.path)}`);
+                                        refsSig = ""; renderRefs(main); window.scrollTo(0, 0); } },
+          $("span", { class: "sicon" }, st.icon), r.ref.name);
+      })));
+  const empty = sections.length ? null : $("div", { class: "hint", style: "margin:8px 0" },
+    refShow === "todo" ? "Everything is approved. ✓" : "Nothing matches.");
+  return $("nav", { class: "sidebar" }, search, show, ...sections, empty,
+    $("div", { class: "hint legend" }, "References are created automatically for everything a planned panel shows. ",
+      "✓ approved · ⚠ none approved · 📝 location (description only) · ○ no images yet · ⛔ waiting for another reference · ★ better candidate suggested · ⏳ working · 🕒 queued"));
+}
+
+async function renderRefs(main, fromPoll = false) {
+  clearTimeout(refsPoll);
+  if (mode !== "refs") return;
+  const refs = await (await fetch("/api/refs")).json();
+  const sig = JSON.stringify(refs.map(r => [r.candidates.length, r.running, r.status, r.queued,
+                                            r.ref.approved && r.ref.approved.version, r.assessment && r.assessment.created_utc]));
+  const editing = document.activeElement && document.activeElement.tagName === "TEXTAREA";
+  if (fromPoll && (sig === refsSig || editing)) {
+    refsPoll = setTimeout(() => renderRefs(main, true), 5000);
+    return;
+  }
+  refsSig = sig;
+  if (!refs.some(r => r.path === refSel)) {
+    refSel = (refs.find(r => !r.ref.approved) || refs[0] || {}).path || null;
+  }
+  const selected = refs.filter(r => r.path === refSel);
+  const cards = selected.map(r => {
+    const desc = $("textarea", { class: "answer", onchange: async e => {
+      await fetch("/api/ref/update", { method: "POST", body: JSON.stringify({ path: r.path, description: e.target.value }) });
+      setStatus("description saved");
+    } });
+    desc.value = r.ref.description;
+    const post = async (url, body) => {
+      const res = await (await fetch(url, { method: "POST", body: JSON.stringify(body) })).json();
+      if (!res.ok) alert(res.message);
+      renderRefs(main);
+    };
+    const waitingFor = (r.components || []).filter(c => !c.approved);
+    const busyHere = r.running || r.queued.length > 0 || waitingFor.length > 0;  // blocked = no generating
+    const refLink = c => $("a", { href: `#ref=${encodeURIComponent(c.path)}`, onclick: e => { e.preventDefault(); goToRef(c.path); } }, c.name);
+    const blockedBanner = waitingFor.length ? $("div", { class: "blocked" },
+      $("b", {}, "⛔ Can't generate yet."), " This character wears or carries ",
+      ...waitingFor.flatMap((c, i) => [i ? (i === waitingFor.length - 1 ? " and " : ", ") : "", refLink(c),
+        $("span", { class: "hint" }, c.has_images ? " (choose and approve a candidate)" : " (no images yet: generate candidates first)")]),
+      ". Approve ", waitingFor.length > 1 ? "those" : "that", " first: the approved image", waitingFor.length > 1 ? "s are" : " is",
+      " used as reference so it looks the same everywhere.") : null;
+    const verb = r.busy ? "Queue: " : "";
+    const gen = $("button", { disabled: busyHere,
+                              title: waitingFor.length ? "Approve the worn/carried objects first" : "",
+                              onclick: () => post("/api/ref/generate", { path: r.path, count: 4 }) },
+      verb + (r.candidates.length ? "Generate 4 more (current description)" : "Generate 4 candidates"));
+    const assessBtn = $("button", { disabled: busyHere || !r.candidates.length,
+      onclick: () => post("/api/ref/assess", { path: r.path }) }, r.assessment ? "Re-assess" : "Assess candidates");
+    const a = r.assessment;
+    const stale = a && a.description_assessed !== r.ref.description;
+    const verdict = a ? $("div", { class: "verdict" },
+      $("b", {}, "Assessment"), stale ? $("span", { class: "hint" }, " (made with an older description)") : null,
+      $("div", {}, a.best ? ["Best candidate: ", $("b", {}, "seed " + (a.best.match(/seed(\d+)/) || [, a.best])[1]), ". "] : "No usable candidate. ",
+        a.best_reason),
+      a.persistent_issues && a.persistent_issues.length
+        ? $("div", { class: "issues habit" }, $("b", {}, "FLUX keeps doing this:"),
+            $("div", { class: "hint" }, stale ? "The description changed: wait for the re-assessment before accepting the next one."
+              : "It appears in many candidates and fixes don't change it. Accept it (the description is adjusted and the scores recalculated) or keep requiring it."),
+            ...a.persistent_issues.map(p => $("div", { class: "sub" },
+              $("span", { class: "badge " + (p.importance === "high" ? "warn" : p.importance === "medium" ? "rec" : "none") },
+                `${p.importance} importance`), " ",
+              p.deviates_from === "book" ? $("span", { class: "badge warn" }, "📕 differs from the book")
+                : p.deviates_from === "decision" ? $("span", { class: "badge warn" }, "✋ differs from your decision")
+                : p.deviates_from === "free_choice" ? $("span", { class: "badge none" }, "free choice (the book is silent)") : null,
+              ` ${p.issue} (in ${p.seen_in} candidates) `,
+              p.source_quote ? $("div", { class: "hint quote" }, (p.deviates_from === "book" ? "Book: " : "Decision: ") + p.source_quote) : null,
+              $("button", { class: "primary", disabled: (r.running || r.queued.length > 0) || stale, title: stale ? "Wait for the re-assessment (the description changed)" : "",
+                onclick: () => (p.deviates_from === "free_choice" || p.deviates_from === undefined ||
+                  confirm(`This contradicts ${p.deviates_from === "book" ? "the book" : "your decision"}:\n\n${p.source_quote}\n\nAccept what FLUX draws anyway?`)) && post("/api/ref/habit",
+                { path: r.path, issue: p.issue, accept: true, description: p.description_if_accepted }) }, "Accept"),
+              " ", $("button", { onclick: () => post("/api/ref/habit", { path: r.path, issue: p.issue, accept: false }) },
+                "Keep requiring it")))) : null,
+      a.description_issues && a.description_issues.length
+        ? $("div", { class: "issues" }, $("b", {}, "Problems with the description itself:"),
+            ...a.description_issues.map(t => $("div", { class: "sub" }, "⚠ " + t))) : null,
+      a.suggested_description && a.suggested_description !== r.ref.description
+        ? $("div", { class: "suggest" }, $("b", {}, "Suggested description:"),
+            $("div", { class: "cap" }, a.suggested_description),
+            $("div", { class: "tools" }, $("button", { class: "primary", disabled: busyHere,
+              onclick: () => post("/api/ref/generate", { path: r.path, count: 4, description: a.suggested_description }) },
+              verb + "Use suggested description & generate 4 new"))) : null) : null;
+    const running = r.running ? $("div", { class: "safety" }, "Working… " + (r.status || ""))
+      : r.queued.length ? $("div", { class: "safety" },
+          `Queued (position ${r.queued[0].position}): ${r.queued.map(q => q.kind).join(", ")}. Starts when the current job is done. `,
+          $("button", { onclick: () => post("/api/ref/unqueue", { path: r.path }) }, "Remove from queue"))
+      : null;
+    const resetNote = !r.ref.approved && (r.ref.approved_history || []).some(h => h.cleared_because)
+      ? $("div", { class: "hint" }, "The previous approval was cleared because new candidates were generated. Choose again.") : null;
+    const approvedFile = r.ref.approved ? `${r.path}/${r.ref.approved.file}` : null;
+    const rank = c => c.assessment ? c.assessment.score * 10 + (a && a.best && c.file.endsWith(a.best) ? 5 : 0) : -1;
+    const sorted = [...r.candidates].sort((x, y) => rank(y) - rank(x) || y.file.localeCompare(x.file));
+    const cands = sorted.map(c => {
+      const isApproved = r.ref.approved && c.file.endsWith(r.ref.approved.from_candidate);
+      const as = c.assessment;
+      const isBest = a && a.best && c.file.endsWith(a.best);
+      const review = as ? $("div", { class: "review" },
+        $("div", {}, $("span", { class: "badge " + (as.score >= 4 ? "user" : as.score >= 3 ? "rec" : "none") },
+          `score ${as.score}/5`), " ",
+          as.matches_book === undefined
+            ? (as.matches_description ? $("span", { class: "badge user" }, "matches description")
+                                      : $("span", { class: "badge warn" }, "⚠ differs from description"))
+            : as.matches_book
+              ? $("span", { class: "badge user" }, as.matches_description ? "✓ matches book and description" : "✓ matches the book")
+              : $("span", { class: "badge warn" }, "📕 contradicts the book"),
+          isBest ? $("span", { class: "badge user" }, " ★ best") : null),
+        ...(as.book_conflicts || []).map(t => $("div", { class: "dev book" }, "📕 " + t)),
+        ...as.deviations.map(t => $("div", { class: "dev" + (as.book_conflicts ? " free" : "") },
+          (as.book_conflicts ? "⚠ free choice differs: " : "⚠ ") + t)),
+        ...as.story_conflicts.map(t => $("div", { class: "dev story" }, "📖 " + t)),
+        ...as.pros.map(t => $("div", { class: "pro" }, "+ " + t)),
+        ...as.cons.map(t => $("div", { class: "con" }, "− " + t))) : null;
+      const problems = as ? (as.book_conflicts || []).length + as.deviations.length + as.story_conflicts.length : 0;
+      const adoptBtn = as && as.matches_book && as.deviations.length && !busyHere ? $("button", {
+        title: "This candidate fits the book: change the free choices in the description to what this image shows (book facts stay)",
+        onclick: async e => {
+          e.target.disabled = true; e.target.textContent = "Updating description…";
+          const res = await (await fetch("/api/ref/adopt", { method: "POST", body: JSON.stringify({ path: r.path, file: c.file }) })).json();
+          if (!res.ok) { alert("Could not update:\n" + res.message); renderRefs(main); return; }
+          const x = res.result;
+          alert("Description updated to match this candidate.\n\nChanged:\n" + (x.changes.map(t => "• " + t).join("\n") || "(nothing)") +
+                (x.kept_despite_image.length ? "\n\nKept from the book although the image differs:\n" + x.kept_despite_image.map(t => "• " + t).join("\n") : "") +
+                "\n\nThe candidates are being re-assessed.");
+          refsSig = ""; renderRefs(main);
+        } }, "Use this look for the description") : null;
+      const fixBtn = problems && !busyHere ? $("button", {
+        title: "Make a NEW candidate from this one: the most important ⚠/📖 point is corrected with an edit (the whole image is redrawn, so other details can drift)",
+        onclick: () => {
+          if (c.parent && !confirm("This is already a fixed version. Fixing again redraws it once more, and small changes tend to add up (a copy of a copy). Continue?")) return;
+          post("/api/ref/fix", { path: r.path, file: c.file });
+        } }, (r.busy ? "Queue: " : "") + "Fix this candidate") : null;
+      const fr = as && as.fix_result;
+      const lineage = c.parent ? $("div", { class: "hint" },
+        `Fixed version of seed ${(c.parent.match(/seed(\d+)/) || [])[1]}, aimed at: “${(as && as.fix_target) || c.edit_instruction}”. `,
+        fr ? $("span", { class: "badge " + (fr === "improved" ? "user" : fr === "failed" ? "warn" : "none") },
+               fr === "improved" ? `fix worked (+${as.score_change})` : fr === "failed" ? `fix failed (${as.score_change})` : "fix made no difference") : null) : null;
+      return $("div", { class: "cand" + (isApproved ? " approved" : "") + (isBest ? " best" : "") },
+        $("a", { href: `/lib?path=${encodeURIComponent(c.file)}`, target: "_blank" },
+          $("img", { src: `/lib?path=${encodeURIComponent(c.file)}`, loading: "lazy" })),
+        $("div", { class: "tools" }, $("span", { class: "num" }, `seed ${c.seed}`),
+          isApproved ? $("span", { class: "badge user" }, "✓ approved")
+                     : $("button", { onclick: async () => {
+                         await fetch("/api/ref/approve", { method: "POST", body: JSON.stringify({ path: r.path, file: c.file }) });
+                         renderRefs(main);
+                       } }, "Approve this one"), adoptBtn, fixBtn),
+        lineage,
+        c.description_used && c.description_used !== r.ref.description
+          ? $("div", { class: "hint" }, "made with an older description") : null,
+        (r.components || []).length && !c.parent
+          ? (c.used_components && c.used_components.length
+              ? $("div", { class: "badge user" }, "made with references: " + c.used_components.map(u =>
+                  ((r.components.find(x => x.path.endsWith("/" + u.id)) || {}).name || u.id) + " v" + u.version).join(", "))
+              : $("div", { class: "badge warn" }, "made WITHOUT the object references (older candidate)"))
+          : null,
+        review || $("div", { class: "hint" }, "not assessed yet"));
+    });
+    if (r.ref.kind === "location") {
+      return $("div", { class: "panel" },
+        $("h3", {}, `${r.ref.name} `, $("span", { class: "hint" }, "(location)")),
+        $("div", { class: "help" }, "📝 Locations are description only: a short, positive version of this description goes into ",
+          "the prompt of every panel set here, so materials, colours and architecture stay consistent. No images are made."),
+        $("div", {}, $("b", {}, "Description "), $("span", { class: "hint" }, "(edit: panels using it are re-prompted on their next generation)")), desc,
+        (r.ref.open_points || []).length ? $("details", { class: "openpoints", open: true },
+          $("summary", {}, `Choices Claude made where the book is silent (${r.ref.open_points.length})`),
+          ...r.ref.open_points.map(t => $("div", { class: "sub" }, "• " + t))) : null,
+        r.ref.generation_prompt ? $("div", { class: "hint" }, "Text used in prompts: ", $("i", {}, r.ref.generation_prompt.text)) : null);
+    }
+    return $("div", { class: "panel" },
+      $("h3", {}, `${r.ref.name} `, $("span", { class: "hint" }, `(${r.ref.kind})`)),
+      blockedBanner,
+      approvedFile
+        ? $("div", { class: "approvedbox" }, $("b", {}, `Approved reference v${r.ref.approved.version}`),
+            $("img", { src: `/lib?path=${encodeURIComponent(r.ref.approved.sheet ? `${r.path}/${r.ref.approved.sheet}` : approvedFile)}` }),
+            r.ref.approved.multi_view_candidate
+              ? $("div", { class: "hint" }, "This is an older multi-view sheet (several views in one image): panels use it as it is.")
+              : $("div", { class: "tools" },
+              r.ref.approved.sheet ? $("span", { class: "hint" }, "Sheet with extra views: this is what panels use.")
+                                   : $("span", { class: "hint" }, "Single view. Extra views make the reference stronger for other angles."),
+              $("button", { class: r.ref.approved.sheet ? "" : "primary", disabled: busyHere,
+                onclick: () => post("/api/ref/views", { path: r.path }) },
+                (r.busy ? "Queue: " : "") + (r.ref.approved.sheet ? "Remake extra views" : "Make extra views"))))
+        : $("div", { class: "safety" }, "No approved reference yet: pick one of the candidates below."),
+      resetNote,
+      $("div", {}, $("b", {}, "Description used for generation "),
+        $("span", { class: "hint" }, "(edit, then generate new candidates)")), desc,
+      (r.ref.open_points || []).length ? $("details", { class: "openpoints", open: !r.candidates.length },
+        $("summary", {}, `Choices Claude made where the book is silent (${r.ref.open_points.length}): check them before generating`),
+        ...r.ref.open_points.map(t => $("div", { class: "sub" }, "• " + t))) : null,
+      (r.components || []).length ? $("div", { class: "rchips" }, $("b", {}, "Wears / carries: "),
+        ...r.components.map(c => $("span", { class: "rchip" },
+          $("span", { class: "badge " + (c.approved ? "user" : "warn") }, (c.approved ? "✓ " : "⚠ ") + c.name + (c.approved ? "" : " (not approved yet)")),
+          " ", $("a", { href: `#ref=${encodeURIComponent(c.path)}`, onclick: e => { e.preventDefault(); goToRef(c.path); } }, "open"))),
+        $("div", { class: "hint" }, waitingFor.length
+          ? "Generation waits until these are approved: their approved images are used as references, so they look the same everywhere."
+          : "Their approved images are used as references when generating this character.")) : null,
+      !r.candidates.length ? $("div", { class: "hint" }, "No images yet. Check the description, then click Generate.") : null,
+      $("div", { class: "tools" }, gen, assessBtn), running, verdict,
+      cands.length ? [$("div", { class: "hint" }, "Candidates, best assessed first:"), $("div", { class: "cands" }, ...cands)]
+                   : $("p", { class: "hint" }, "No candidates yet."));
+  });
+  main.replaceChildren($("div", { class: "reflayout" }, refSidebar(refs, main),
+    $("div", { class: "refmain" },
+      $("div", { class: "help" }, "Reference sheets fix how recurring characters and objects look. ",
+        "Each candidate is checked against its description (⚠) and against the story and page plans (📖), with pros and cons. ",
+        "If the description itself is incomplete, a suggested description is shown: use it to generate better candidates. ",
+        "Click ", $("b", {}, "Approve this one"), " on the best match; click an image to see it full size."),
+      ...(cards.length ? cards : [$("p", { class: "hint" }, "No references yet.")]))));
+  if (refs.some(r => r.running || r.queued.length) || fromPoll) refsPoll = setTimeout(() => renderRefs(main, true), 5000);
+  setStatus("references");
+}
+
+// ---------- status box: what Draw Things is doing ----------
+function goToRef(rel) {
+  mode = "refs"; refSel = rel; refsSig = "";
+  history.replaceState(null, "", `#ref=${encodeURIComponent(rel)}`);
+  render(); window.scrollTo(0, 0);
+}
+
+function goToPanels(page) {
+  const i = state.pages.findIndex(p => p.page === page);
+  if (i >= 0) { current = i; mode = "panels"; panelsSig = ""; history.replaceState(null, "", "#p" + page); render(); window.scrollTo(0, 0); }
+}
+
+function jobLabel(j) {
+  return { panels: `${j.count} panel image(s) + assessment`, panel_assess: "assess panel images (Claude)",
+           generate: `${j.count || 4} candidates, assessment, auto-fix`, fix: "fix a candidate, then assessment",
+           views: `${j.count} extra view(s) + sheet`, assess: "assess candidates (Claude)" }[j.kind] || j.kind;
+}
+
+async function pollJobs() {
+  let info = null;
+  try { info = await (await fetch("/api/jobs")).json(); } catch (e) {}
+  const box = document.getElementById("jobs");
+  if (!info || (!info.current && !info.queue.length)) {
+    box.hidden = true;
+    setTimeout(pollJobs, 8000);
+    return;
+  }
+  box.hidden = false;
+  const kids = [$("div", { class: "jtitle" }, "Draw Things / Claude")];
+  const c = info.current;
+  if (c) {
+    let what, pct = null;
+    const noun = { generate: "candidate", fix: "fixed candidate", views: "view", panels: "image" }[c.kind];
+    if (c.step === "assess") { what = "assessing candidates"; pct = 100; }
+    else if (noun && c.step) {
+      what = `${noun} ${c.step}/${c.count}`;
+      pct = Math.round(100 * (c.done || 0) / c.count);
+    } else if (noun) what = c.detail || "preparing…";
+    else what = "assessing candidates";
+    const mins = Math.floor(c.elapsed / 60), secs = c.elapsed % 60;
+    kids.push($("a", { class: "jitem now", href: "#", onclick: e => { e.preventDefault(); c.rel ? goToRef(c.rel) : goToPanels(c.page); } },
+      $("div", {}, $("b", {}, "Now: "), c.name), $("div", { class: "jwhat" }, `${what} · ${mins}:${String(secs).padStart(2, "0")}`),
+      pct !== null ? $("div", { class: "jbar" }, $("div", { style: `width:${pct}%` })) : null));
+  }
+  info.queue.forEach((q, i) => kids.push(
+    $("a", { class: "jitem", href: "#", onclick: e => { e.preventDefault(); q.rel ? goToRef(q.rel) : goToPanels(q.page); } },
+      $("div", {}, $("b", {}, i === 0 ? "Next: " : `${i + 1}. `), q.name), $("div", { class: "jwhat" }, jobLabel(q)))));
+  box.replaceChildren(...kids);
+  setTimeout(pollJobs, 3000);
+}
+pollJobs();
+
+// ---------- 4 · Panels ----------
+let panelsPoll = null, panelsSig = "", showCaptions = localStorage.getItem("showCaptions") !== "0";
+
+const PLACE = {  // CSS position of a caption box for each planned placement
+  top_left: "top:3%;left:3%", top: "top:3%;left:50%;transform:translateX(-50%)", top_right: "top:3%;right:3%",
+  middle_left: "top:50%;left:3%;transform:translateY(-50%)", middle_right: "top:50%;right:3%;transform:translateY(-50%)",
+  bottom_left: "bottom:3%;left:3%", bottom: "bottom:3%;left:50%;transform:translateX(-50%)", bottom_right: "bottom:3%;right:3%" };
+
+let LETTERING = { font_px: 34, line_height: 1.25, padding_px: 14, max_width_px: 640, margin_px: 24 };
+
+function boxStyle(placement, panelWidthPx) {
+  // Everything in cqw (% of the image's displayed width), scaled from the real size on the
+  // printed page, so a box has the same proportion as the final lettering.
+  const u = v => `${(v / panelWidthPx * 100).toFixed(3)}cqw`;
+  const m = u(LETTERING.margin_px);
+  const pos = (PLACE[placement] || PLACE.top_left).replace(/3%/g, m);
+  return `${pos};font-size:${u(LETTERING.font_px)};line-height:${LETTERING.line_height};` +
+         `padding:${u(LETTERING.padding_px * 0.6)} ${u(LETTERING.padding_px)};max-width:${u(LETTERING.max_width_px)};` +
+         `border-width:max(1px, ${u(3)})`;
+}
+
+function textBoxes(p) {
+  return [...p.captions.map(c => ({ ...c, kind: "caption" })),
+          ...(p.dialogue || []).map(d => ({ ...d, kind: "speech", text: `${d.speaker}: ${d.text}` }))];
+}
+
+function withTextBoxes(img, p) {
+  // The image with the panel's captions/dialogue at their planned position and real relative
+  // size (preview only: real lettering is Milestone E).
+  if (!showCaptions || !p.spec) return img;
+  const w = p.spec.page_box.w;
+  return $("div", { class: "textwrap" }, img,
+    ...textBoxes(p).map(b => $("div", { class: "textbox " + b.kind, style: boxStyle(b.placement, w) }, b.text)));
+}
+
+async function renderPanels(pg, main, fromPoll = false) {
+  clearTimeout(panelsPoll);
+  if (mode !== "panels") return;
+  const info = await (await fetch(`/api/panels?page=${pg.page}`)).json();
+  if (info.lettering) LETTERING = info.lettering;
+  const sig = JSON.stringify(info.exists && [info.running, info.queued, info.panels.map(p => [p.candidates.length, p.selected, !!p.spec, p.assessment && p.assessment.created_utc])]);
+  if (fromPoll && sig === panelsSig) { panelsPoll = setTimeout(() => renderPanels(pg, main, true), 6000); return; }
+  panelsSig = sig;
+  const bar = $("div", { class: "pagebar" }, $("strong", {}, `Page ${pg.page}`), modeSwitch());
+  if (!info.exists) {
+    main.replaceChildren(bar, $("div", { class: "help" }, "No page plan yet: finish ", $("b", {}, "3 · Plan"), " first."));
+    return;
+  }
+  const post = async (url, body) => (await fetch(url, { method: "POST", body: JSON.stringify(body) })).json();
+  const rebuild = $("button", { onclick: async () => {
+    rebuild.disabled = true; rebuild.textContent = "Building prompts…";
+    const r = await post("/api/panels/build", { page: pg.page });
+    if (!r.ok) alert("Some panels could not be built:\n" + r.log);
+    panelsSig = ""; renderPanels(pg, main);
+  } }, info.prompts_built ? "Rebuild prompts" : "Build prompts");
+  const anyBlocked = info.panels.some(p => p.blocked.length);
+  const genAll = $("button", { class: "primary", disabled: !info.prompts_built || anyBlocked,
+                               title: anyBlocked ? "Some panels still need approved references" : "", onclick: async () => {
+    const r = await post("/api/panels/generate", { page: pg.page, count: 2 });
+    if (!r.ok) alert(r.message);
+    panelsSig = ""; renderPanels(pg, main);
+  } }, "Generate all panels (2 candidates each)");
+  const outdated = info.prompts_outdated && !info.missing_references.length ? $("div", { class: "safety" },
+    "Some prompts are outdated: a reference was approved after they were built. They are rebuilt automatically when you generate, ",
+    "or click ", $("b", {}, "Rebuild prompts"), " now to see them.") : null;
+  const status = info.running ? $("div", { class: "safety" }, "Generating panels… (see the status box)")
+    : info.queued ? $("div", { class: "safety" }, "Panel generation is queued behind another job.") : null;
+  const missingLink = m => m.path
+    ? $("a", { href: `#ref=${encodeURIComponent(m.path)}`, onclick: e => { e.preventDefault(); goToRef(m.path); } }, m.name)
+    : $("b", {}, m.name);
+  const missing = info.missing_references.length ? $("div", { class: "blocked" },
+    $("b", {}, "⛔ This page can't be generated yet."), " Needed first:",
+    ...info.missing_references.map(m => typeof m === "string" ? { name: m, panels: [] } : m).map(m => $("div", { class: "sub" }, "• ", missingLink(m),
+      m.panels.length ? $("span", { class: "hint" }, ` (${m.status === "missing" ? "no reference yet" : "not approved yet"}; panel${m.panels.length > 1 ? "s" : ""} ${m.panels.join(", ")})`) : null)),
+    $("div", { class: "hint" }, "After approving, click Rebuild prompts here so the panels use the approved images.")) : null;
+
+  // page preview: layout with the chosen images
+  const byNum = Object.fromEntries(info.panels.map(p => [p.panel, p]));
+  const preview = $("div", { class: "sketch preview" }, ...info.tiers.map(t =>
+    $("div", { class: "tier", style: `height:${(t.height * 100).toFixed(1)}%` }, ...t.panels.map(tp => {
+      const p = byNum[tp.panel] || {};
+      const img = p.selected || (p.candidates && p.candidates[0] && p.candidates[0].file);
+      const box = $("a", { class: "pbox" + (p.selected ? " chosen" : ""), href: `#panel-${tp.panel}`,
+                      style: `width:${(tp.width * 100).toFixed(1)}%;position:relative;` + (img ? `background-image:url('/comic?path=${encodeURIComponent(img)}')` : ""),
+                      onclick: e => { e.preventDefault(); document.getElementById(`panel-${tp.panel}`).scrollIntoView({ behavior: "smooth" }); } },
+        $("span", { class: "pn" }, tp.panel),
+        ...(showCaptions && p.spec ? textBoxes(p).map(b =>
+          $("div", { class: "textbox " + b.kind, style: boxStyle(b.placement, p.spec.page_box.w) }, b.text)) : []));
+      return box;
+    }))));
+
+  const cards = info.panels.map(p => {
+    const spec = p.spec;
+    const reqs = (spec && spec.required_references) || [];
+    const chip = r => {
+      const icon = r.status === "approved" ? "✓" : r.status === "described" ? "📝" : r.status === "unapproved" ? "⚠" : "✗";
+      const cls = !r.needed ? "none" : r.status === "approved" ? "user" : "warn";
+      const label = r.status === "approved" ? "" : r.status === "described" ? " (described in the prompt)"
+                  : r.status === "unapproved" ? " (not approved yet)" : " (no reference yet)";
+      const open = r.path
+        ? $("a", { href: `#ref=${encodeURIComponent(r.path)}`, onclick: e => { e.preventDefault(); goToRef(r.path); } }, "open")
+        : $("button", { onclick: async e => {
+            e.target.disabled = true; e.target.textContent = "Creating… (Claude writes the description)";
+            const res = await post("/api/ref/create", { kind: r.kind, id: r.id, name: r.name });
+            if (!res.ok) { alert("Could not create:\n" + res.log); e.target.disabled = false; return; }
+            goToRef(res.path);
+          } }, "Create reference");
+      return $("span", { class: "rchip", title: r.why }, $("span", { class: "badge " + cls }, `${icon} ${r.name}${label}`),
+               r.needed || r.status === "described" ? null : $("span", { class: "hint" }, ` ${r.why}`), " ", open);
+    };
+    const refs = spec ? (reqs.length ? reqs.map(chip) : "none") : "prompt not built";
+    const pa = p.assessment;
+    const rank = c => c.assessment ? c.assessment.score * 10 + (pa && pa.best && c.file.endsWith(pa.best) ? 5 : 0) : -1;
+    const sortedCands = [...p.candidates].sort((x, y) => rank(y) - rank(x) || y.file.localeCompare(x.file));
+    const cands = sortedCands.map(c => {
+      const chosen = p.selected === c.file;
+      const as = c.assessment;
+      const isBest = pa && pa.best && c.file.endsWith(pa.best);
+      const list = (arr, icon, cls) => (arr || []).map(t => $("div", { class: "dev " + cls }, icon + " " + t));
+      const review = as ? $("div", { class: "review" },
+        $("div", {}, $("span", { class: "badge " + (as.score >= 4 ? "user" : as.score >= 3 ? "rec" : "none") }, `score ${as.score}/5`), " ",
+          as.matches_book ? $("span", { class: "badge user" }, "✓ matches the book") : $("span", { class: "badge warn" }, "📕 contradicts the book"),
+          isBest ? $("span", { class: "badge user" }, " ★ best") : null),
+        ...list(as.book_conflicts, "📕", "book"), ...list(as.plan_deviations, "⚠ plan:", "free"),
+        ...list(as.reference_mismatches, "🧩 reference:", ""), ...list(as.text_space_problems, "✎ text space:", "free"),
+        ...list(as.defects, "✗ defect:", ""),
+        ...(as.pros || []).map(t => $("div", { class: "pro" }, "+ " + t)),
+        ...(as.cons || []).map(t => $("div", { class: "con" }, "− " + t))) : $("div", { class: "hint" }, "not assessed yet");
+      const outdated = spec && c.prompt_sha256 && c.prompt_sha256 !== spec.prompt_sha256;
+      return $("div", { class: "cand" + (chosen ? " approved" : "") + (isBest ? " best" : "") },
+        withTextBoxes($("a", { href: `/comic?path=${encodeURIComponent(c.file)}`, target: "_blank" },
+          $("img", { src: `/comic?path=${encodeURIComponent(c.file)}`, loading: "lazy" })), p),
+        $("div", { class: "tools" }, $("span", { class: "num" }, `seed ${c.seed}`),
+          chosen ? $("span", { class: "badge user" }, "✓ chosen")
+                 : $("button", { onclick: async () => { await post("/api/panels/select", { page: pg.page, panel: p.panel, file: c.file });
+                                                       panelsSig = ""; renderPanels(pg, main); } }, "Choose this one")),
+        outdated ? $("div", { class: "hint" }, "made with an older prompt") : null, review);
+    });
+    return $("div", { class: "panel", id: `panel-${p.panel}` },
+      $("h3", {}, `Panel ${p.panel} · ${SHOT[p.shot]} · ${ANGLE[p.angle]}`),
+      $("div", { class: "hint" }, p.purpose),
+      $("div", { class: "rchips" }, $("b", {}, "References: "), refs,
+        spec && spec.generation_size ? $("span", { class: "hint" }, ` · generated at ${spec.generation_size.width}×${spec.generation_size.height}`) : null),
+      p.captions.length || (p.dialogue || []).length ? $("div", {}, $("b", {}, "Text: "),
+        ...p.captions.map(c => $("div", { class: "sub cap" }, `▭ caption, ${c.placement.replace("_", " ")}: ${c.text}`)),
+        ...(p.dialogue || []).map(d => $("div", { class: "sub cap" }, `💬 ${d.speaker}, ${d.placement.replace("_", " ")}: ${d.text}`))) : null,
+      p.text_space ? $("div", {}, $("b", {}, "Space kept free for text: "), p.text_space) : null,
+      spec ? $("details", {}, $("summary", { class: "hint" }, "Show prompt"), $("pre", { class: "prompt" }, spec.prompt)) : null,
+      p.prompt_outdated && !p.blocked.length ? $("div", { class: "hint" }, "↻ Prompt outdated: the reference image changed since it was built (rebuilt automatically on generate).") : null,
+      p.blocked.length ? $("div", { class: "blocked" }, "⛔ Can't generate yet: approve ",
+        ...p.blocked.flatMap((r, i) => [i ? ", " : "", r.path
+          ? $("a", { href: `#ref=${encodeURIComponent(r.path)}`, onclick: e => { e.preventDefault(); goToRef(r.path); } }, r.name)
+          : $("b", {}, r.name)]), " first.") : null,
+      $("div", { class: "tools" }, $("button", { disabled: !spec || p.blocked.length > 0, onclick: async () => {
+        const r = await post("/api/panels/generate", { page: pg.page, panels: [p.panel], count: 2 });
+        if (!r.ok) alert(r.message); panelsSig = ""; renderPanels(pg, main);
+      } }, "Generate 2 more for this panel"),
+        $("button", { disabled: !p.candidates.length, onclick: async () => {
+          const r = await post("/api/panels/assess", { page: pg.page, panel: p.panel });
+          if (!r.ok) alert(r.message); panelsSig = ""; renderPanels(pg, main);
+        } }, p.assessment ? "Re-assess" : "Assess images")),
+      pa ? $("div", { class: "verdict" }, $("b", {}, "Assessment: "),
+        pa.best ? ["best is ", $("b", {}, "seed " + ((pa.best.match(/seed(\d+)/) || [])[1] || "?")), ". "] : "no usable image. ",
+        pa.best_reason) : null,
+      cands.length ? $("div", { class: "cands" }, ...cands) : $("p", { class: "hint" }, "No images yet."));
+  });
+
+  main.replaceChildren(bar,
+    $("div", { class: "help" }, "Each panel is generated from its prompt (plan + style + approved references). ",
+      "Pick the best image per panel with ", $("b", {}, "Choose this one"), ". The page preview on the left shows your choices. ",
+      "Speech balloons and captions are added later (Milestone E), not by the image model."),
+    missing, outdated, status,
+    $("div", { class: "tools" }, rebuild, genAll,
+      $("label", { style: "margin-left:auto" }, $("input", { type: "checkbox", checked: showCaptions, onchange: e => {
+        showCaptions = e.target.checked; localStorage.setItem("showCaptions", showCaptions ? "1" : "0"); panelsSig = ""; renderPanels(pg, main);
+      } }), " show text boxes on images")),
+    $("div", { class: "planwrap" }, preview, $("div", { class: "details" }, ...cards)));
+  if (info.running || info.queued || fromPoll) panelsPoll = setTimeout(() => renderPanels(pg, main, true), 6000);
+}
+
+// ---------- Pages: every comic page, full screen, PDF export ----------
+let bookIndex = 0, bookStatus = localStorage.getItem("bookStatus") === "1",
+    bookFit = localStorage.getItem("bookFit") || "width";
+
+function pageView(book, pgState) {
+  const W = book.width, H = book.height;
+  const pct = (v, t) => `${(v / t * 100).toFixed(3)}%`;
+  return $("div", { class: "bookpage fit-" + bookFit }, ...pgState.panels.map(p => {
+    const b = p.box;
+    const style = `left:${pct(b.x, W)};top:${pct(b.y, H)};width:${pct(b.w, W)};height:${pct(b.h, H)};` +
+      (p.image_rel ? `background-image:url('/comic?path=${encodeURIComponent(p.image_rel)}')` : "");
+    return $("div", { class: "bookpanel" + (p.image_rel ? "" : " empty"), style },
+      p.image_rel ? null : $("span", { class: "emptylabel" }, `Panel ${p.panel}: not generated yet`),
+      ...p.texts.map(t => $("div", { class: "textbox " + t.kind, style: boxStyle(t.placement, b.w) }, t.text)),
+      bookStatus ? $("span", { class: "pstatus " + p.status.replace(/ /g, "-") }, `${p.panel} · ${p.status}`) : null);
+  }));
+}
+
+async function renderBook(main) {
+  const book = await (await fetch("/api/book")).json();
+  if (book.lettering) LETTERING = book.lettering;
+  if (!book.pages.length) { main.replaceChildren($("div", { class: "help" }, "No planned pages yet.")); return; }
+  bookIndex = Math.max(0, Math.min(bookIndex, book.pages.length - 1));
+  const pgState = book.pages[bookIndex];
+  const go = d => {
+    bookIndex = Math.max(0, Math.min(book.pages.length - 1, bookIndex + d));
+    renderBook(main).then(() => {   // start at the top of the new page
+      const w = document.getElementById("bookwrap");
+      if (document.fullscreenElement === w) w.scrollTop = 0; else w.scrollIntoView({ block: "start" });
+    });
+  };
+  const content = [
+    $("button", { class: "booknav prev", disabled: bookIndex === 0, onclick: () => go(-1), title: "Previous page (←)" }, "‹"),
+    pageView(book, pgState),
+    $("button", { class: "booknav next", disabled: bookIndex === book.pages.length - 1, onclick: () => go(1), title: "Next page (→)" }, "›"),
+    $("div", { class: "bookno" }, `Page ${pgState.page} (${bookIndex + 1}/${book.pages.length})`)];
+  // In full screen, keep the same element (replacing it would leave full screen).
+  const existing = document.getElementById("bookwrap");
+  if (existing && document.fullscreenElement === existing) {
+    existing.className = "bookwrap fit-" + bookFit;
+    existing.replaceChildren(...content);
+    return;
+  }
+  const wrap = $("div", { class: "bookwrap fit-" + bookFit, id: "bookwrap" }, ...content);
+  const counts = pgState.panels.reduce((m, p) => (m[p.status] = (m[p.status] || 0) + 1, m), {});
+  const exportLink = (href, label) => $("a", { class: "btnlink", href, onclick: e => {
+    e.target.textContent = "Rendering PDF…"; setTimeout(() => e.target.textContent = label, 6000); } }, label);
+  const bar = $("div", { class: "pagebar" },
+    $("button", { disabled: bookIndex === 0, onclick: () => go(-1) }, "← Previous"),
+    $("select", { onchange: e => { bookIndex = +e.target.value; renderBook(main); } },
+      ...book.pages.map((p, i) => $("option", { value: i, selected: i === bookIndex }, `Page ${p.page}`))),
+    $("button", { disabled: bookIndex === book.pages.length - 1, onclick: () => go(1) }, "Next →"),
+    $("button", { onclick: () => document.getElementById("bookwrap").requestFullscreen() }, "⛶ Full screen"),
+    $("span", { class: "modes" },
+      $("button", { class: bookFit === "width" ? "on" : "", onclick: () => { bookFit = "width"; localStorage.setItem("bookFit", "width"); renderBook(main); } }, "Full width"),
+      $("button", { class: bookFit === "height" ? "on" : "", onclick: () => { bookFit = "height"; localStorage.setItem("bookFit", "height"); renderBook(main); } }, "Fit to screen")),
+    $("label", {}, $("input", { type: "checkbox", checked: bookStatus, onchange: e => {
+      bookStatus = e.target.checked; localStorage.setItem("bookStatus", bookStatus ? "1" : "0"); renderBook(main); } }), " show panel status"),
+    $("span", { style: "margin-left:auto" }),
+    exportLink(`/export.pdf?pages=${pgState.page}`, "⤓ This page as PDF"),
+    exportLink(`/export.pdf?all=1`, `⤓ All pages as one PDF (${book.pages.length})`));
+  main.replaceChildren(bar,
+    $("div", { class: "hint", style: "margin-bottom:8px" },
+      "Shows the current state of every planned page: chosen images, else the best assessed, else the newest. ",
+      Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(" · "),
+      ". Keys: ← → to browse, F for full screen."),
+    wrap);
+}
+
+document.addEventListener("keydown", e => {
+  if (mode !== "book" || ["INPUT", "TEXTAREA", "SELECT"].includes((document.activeElement || {}).tagName)) return;
+  const btn = document.querySelector(e.key === "ArrowLeft" ? ".booknav.prev" : e.key === "ArrowRight" ? ".booknav.next" : null);
+  if (btn && !btn.disabled) { btn.click(); e.preventDefault(); }
+  if (e.key === "f" || e.key === "F") { const w = document.getElementById("bookwrap"); if (w) w.requestFullscreen(); }
+});
 
 load().catch(e => { document.getElementById("status").textContent = "error: " + e; });
 </script>

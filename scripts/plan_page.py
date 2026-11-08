@@ -68,9 +68,15 @@ SCHEMA = {
                 "required": ["speaker", "text", "placement"]}},
             "text_space": {"type": "string",
                            "description": "Where the image must leave calm, empty-ish space for captions/balloons."},
-            "safety_notes": {"type": "string", "description": "Content notes, e.g. minors present. Empty if none."}},
+            "content_flags": {"type": "array", "items": {"type": "string", "enum": [
+                "violence", "injury", "gore", "death", "nudity", "intimacy", "sexual_violence",
+                "child_in_danger"]},
+                "description": "Only what the panel actually shows. Empty for ordinary scenes."},
+            "safety_notes": {"type": "string",
+                             "description": "Only if content_flags is non-empty: how the panel handles it. Otherwise empty."}},
             "required": ["panel", "beats", "purpose", "shot", "angle", "location", "lighting", "characters",
-                         "objects", "description", "captions", "dialogue", "text_space", "safety_notes"]}},
+                         "objects", "description", "captions", "dialogue", "text_space", "content_flags",
+                         "safety_notes"]}},
         "design_choices": {"type": "array", "items": {"type": "string"},
                            "description": "Choices you made where the answers left options open (e.g. 'blue or burgundy' -> blue)."},
     },
@@ -97,12 +103,25 @@ Layout rules:
   shadow), never over faces.
 - Follow the user's decisions exactly. Where a decision leaves options open
   ("blue or burgundy"), choose one and list it under design_choices.
-- Characters: use ids. For children: ordinary, non-sexualised, age-appropriate depiction;
-  note it in safety_notes.
+- Characters and objects with an approved reference (listed below): do NOT describe their
+  appearance (hair, clothing, colours) in the panel description; refer to them by name and
+  describe only position, pose, action and expression. Their look comes from the reference.
+- Write descriptions, poses, lighting and text_space POSITIVELY: say what IS there. The image
+  model tends to draw whatever is named, even after "no"/"not"/"without" ("empty-handed" instead
+  of "no weapon"; "only grey smoke and haze" instead of "no flames").
+- Characters: use ids.
+- Content flags: set them only when a panel actually shows violence, injury, gore, death,
+  nudity, intimacy, sexual violence, or a child in danger or distress; then explain the
+  handling in safety_notes. Ordinary scenes get no flags and an empty safety_notes.
+  Hard rule: never plan nudity, intimacy or sexual content involving a minor or a character
+  of unknown age. Sexual violence is never shown, only implied (reaction, aftermath).
 - Do not show or hint at plot information that is not yet revealed (see brief).
 
 Chapter brief (context):
 {brief}
+
+Approved references (appearance is fixed by these):
+{library}
 
 User decisions:
 {decisions}
@@ -120,6 +139,16 @@ def decisions_text(page):
     return "\n".join(f"- {d['question']} -> {d['answer']}" for d in ds) or "(none)"
 
 
+def library_text():
+    lib = ROOT / "library"
+    lines = []
+    for f in sorted(lib.glob("*/*/ref.json")):
+        r = json.loads(f.read_text())
+        if r.get("approved"):
+            lines.append(f"- {r['name']} [id {r['id']}]: {r['description']}")
+    return "\n".join(lines) or "(none)"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("page", type=int)
@@ -135,7 +164,7 @@ def main():
     prev = folder / "page_plan.json"
     if args.note and prev.exists():
         note += "\nPrevious plan:\n" + prev.read_text()
-    prompt = PROMPT.format(brief=brief, decisions=decisions_text(args.page), page=args.page,
+    prompt = PROMPT.format(brief=brief, library=library_text(), decisions=decisions_text(args.page), page=args.page,
                            scene=json.dumps(scene, indent=1, ensure_ascii=False), note=note)
 
     cmd = ["claude", "-p", prompt, "--output-format", "json", "--json-schema", json.dumps(SCHEMA),
@@ -168,6 +197,9 @@ def main():
           f"({elapsed}s) -> {prev}")
     for p in problems:
         print("  warning:", p)
+    # Create library entries for references this page needs (description only, no images).
+    subprocess.run([sys.executable, str(Path(__file__).resolve().parent / "ensure_references.py"),
+                    str(args.page)], check=False)
 
 
 def validate(plan):
